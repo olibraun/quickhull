@@ -72,22 +72,27 @@ function QuickHull(S) {
   // and S2 are points in S that are on the right side of the oriented line from B to A
   let S1 = [];
   let S2 = [];
-  for(let i = 0; i < S.length; i++) {
-    if(S[i] != A && S[i] != B) {
-      const AB = A.sub(B);
-      const scalarprod = S[i].x*AB.x + S[i].y*AB.y;
-      if(scalarprod >= 0) {
-        S1.push(S[i]);
-      } else {
-        S2.push(S[i]);
-      }
-    }
-  }
-
+  partition(S, A, B, S1, S2);
   FindHull(S1, A, B);
   FindHull(S2, B, A);
 }
 
 function FindHull(Sk, P, Q) {
   return;
+}
+
+function partition(S, A, B, S1, S2) {
+  for (let i = 0; i < S.length; i++) {
+    if (S[i] != A && S[i] != B) {
+      const AB = p5.Vector.sub(A, B);
+      const ABperp = createVector(AB.y, -AB.x);
+      const scalarprod = S[i].x * AB.x + S[i].y * AB.y;
+      if (scalarprod >= 0) {
+        S1.push(S[i]);
+      }
+      else {
+        S2.push(S[i]);
+      }
+    }
+  }
 }
