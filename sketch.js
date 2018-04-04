@@ -82,12 +82,14 @@ function FindHull(Sk, P, Q) {
 }
 
 function partition(S, A, B, S1, S2) {
+  const AB = createVector(B.x - A.x, B.y - A.y);
+  const ABperp = createVector(- AB.y, AB.x);
+  const limitValue = ABperp.x * A.x + ABperp.y * A.y;
+  console.log('A, B, AB, ABp', A, B, AB, ABperp);
   for (let i = 0; i < S.length; i++) {
     if (S[i] != A && S[i] != B) {
-      const AB = p5.Vector.sub(A, B);
-      const ABperp = createVector(AB.y, -AB.x);
-      const scalarprod = S[i].x * AB.x + S[i].y * AB.y;
-      if (scalarprod >= 0) {
+      const scalarprod = S[i].x * ABperp.x + S[i].y * ABperp.y;
+      if (scalarprod >= limitValue) {
         S1.push(S[i]);
       }
       else {
