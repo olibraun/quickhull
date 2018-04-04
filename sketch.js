@@ -1,13 +1,13 @@
 // Quickhull implementation and visualization
 
 let S = [];
-const numberOfPoints = 25;
+const numberOfPoints = 800;
 const margin = 40;
 
 let convexHull = [];
 
 function setup() {
-  createCanvas(400, 400);
+  createCanvas(1000, 800);
   background(51);
 
   for(let i = 0; i < numberOfPoints; i++) {
