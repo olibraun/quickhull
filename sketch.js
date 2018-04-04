@@ -78,7 +78,39 @@ function QuickHull(S) {
 }
 
 function FindHull(Sk, P, Q) {
-  return;
+  // Find points on convex hull from the set Sk of points 
+  // that are on the right side of the oriented line from P to Q
+
+  // If Sk has no point, then return.
+  if(Sk.length == 0) {
+    return;
+  }
+
+  // From the given set of points in Sk, find farthest point, say C, from segment PQ
+  let maxDist = 0;
+  let C;
+  Sk.forEach(s => {
+    const dist = distLinePointSq(P, Q, s);
+    if(dist > maxDist) {
+      maxDist = dist;
+      C = s;
+    }
+  });
+
+  // Add point C to convex hull at the location between P and Q.
+  const Ppos = S.findIndex(x => x == P);
+  const Qpos = S.findIndex(x => x == Q);
+  Ppos < Qpos ? convexHull.splice(Ppos, 0, C) : convexHull.splice(Qpos, 0, C);
+
+  // Three points P, Q, and C partition the remaining points of Sk into 3 subsets: S0, S1, and S2 
+  // where S0 are points inside triangle PCQ, S1 are points on the right side of the oriented 
+  // line from  P to C, and S2 are points on the right side of the oriented line from C to Q. 
+  let S1 = [];
+  let S2 = [];
+  partition(Sk, P, C, S1, []);
+  partition(Sk, C, Q, S2, []);
+  FindHull(S1, P, C);
+  FindHull(S2, C, Q);
 }
 
 function partition(S, A, B, S1, S2) {
@@ -97,4 +129,10 @@ function partition(S, A, B, S1, S2) {
       }
     }
   }
+}
+
+function distLinePointSq(A,B,C) {
+  const numerator = Math.abs( (B.y-A.y)*C.x - (B.x-A.x)*C.y + B.x*A.y - B.y*A.x );
+  const denominator = (B.y-A.y)**2 + (B.x-A.x)**2;
+  return (numerator**2)/denominator;
 }
