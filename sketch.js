@@ -6,14 +6,16 @@ const margin = 40;
 
 let convexHull = [];
 
+let clearButton;
+
 function setup() {
   createCanvas(1000, 800);
   background(51);
 
-  // for(let i = 0; i < numberOfPoints; i++) {
-  //   const pnt = createVector(random(margin,width-margin), random(margin,height-margin));
-  //   S.push(pnt);
-  // }
+  clearButton = createButton('Clear');
+  clearButton.mousePressed(() => {
+    S = [];
+  });
 }
 
 function draw() {
@@ -146,6 +148,10 @@ function distLinePointSq(A,B,C) {
 }
 
 function mouseClicked() {
+  if(mouseX < 0 || mouseX > width || mouseY < 0 || mouseY > height) {
+    return;
+  }
+  
   const v = createVector(mouseX, mouseY);
   let alreadyContained = false;
   for(let i = 0; i < S.length; i++) {
