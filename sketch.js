@@ -10,15 +10,17 @@ function setup() {
   createCanvas(1000, 800);
   background(51);
 
-  for(let i = 0; i < numberOfPoints; i++) {
-    const pnt = createVector(random(margin,width-margin), random(margin,height-margin));
-    S.push(pnt);
-  }
+  // for(let i = 0; i < numberOfPoints; i++) {
+  //   const pnt = createVector(random(margin,width-margin), random(margin,height-margin));
+  //   S.push(pnt);
+  // }
 }
 
 function draw() {
   // draw background
   background(51);
+
+  QuickHull(S);
 
   // draw points
   push();
@@ -44,6 +46,12 @@ function draw() {
 
 function QuickHull(S) {
   // Find convex hull from the set S of n points
+  convexHull = [];
+
+  // If there aren't at least two points in S, there is nothing to do.
+  if(S.length < 2) {
+    return;
+  }
 
   // Find left and right most points, say A & B, and add A & B to convex hull
 
@@ -135,4 +143,18 @@ function distLinePointSq(A,B,C) {
   const numerator = Math.abs( (B.y-A.y)*C.x - (B.x-A.x)*C.y + B.x*A.y - B.y*A.x );
   const denominator = (B.y-A.y)**2 + (B.x-A.x)**2;
   return (numerator**2)/denominator;
+}
+
+function mouseClicked() {
+  const v = createVector(mouseX, mouseY);
+  let alreadyContained = false;
+  for(let i = 0; i < S.length; i++) {
+    if(S[i].x == v.x && S[i].y == v.y) {
+      alreadyContained = true;
+      break;
+    }
+  }
+  if(!alreadyContained) {
+    S.push(v);
+  }
 }
