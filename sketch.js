@@ -35,10 +35,11 @@ function draw() {
   strokeWeight(2);
   stroke(0, 250, 0);
   beginShape();
-  convexHull.forEach(s => {
+  for(let i = 0; i < convexHull.length; i++) {
+    const s = convexHull[i];
     vertex(s.x, s.y);
-  });
-  endShape();
+  }
+  endShape(CLOSE);
 }
 
 function QuickHull(S) {
@@ -98,9 +99,9 @@ function FindHull(Sk, P, Q) {
   });
 
   // Add point C to convex hull at the location between P and Q.
-  const Ppos = S.findIndex(x => x == P);
-  const Qpos = S.findIndex(x => x == Q);
-  Ppos < Qpos ? convexHull.splice(Ppos, 0, C) : convexHull.splice(Qpos, 0, C);
+  const Ppos = convexHull.findIndex(x => x == P);
+  const Qpos = convexHull.findIndex(x => x == Q);
+  Ppos < Qpos ? convexHull.splice(Ppos + 1, 0, C) : convexHull.splice(Qpos, 0, C);
 
   // Three points P, Q, and C partition the remaining points of Sk into 3 subsets: S0, S1, and S2 
   // where S0 are points inside triangle PCQ, S1 are points on the right side of the oriented 
@@ -117,7 +118,6 @@ function partition(S, A, B, S1, S2) {
   const AB = createVector(B.x - A.x, B.y - A.y);
   const ABperp = createVector(- AB.y, AB.x);
   const limitValue = ABperp.x * A.x + ABperp.y * A.y;
-  console.log('A, B, AB, ABp', A, B, AB, ABperp);
   for (let i = 0; i < S.length; i++) {
     if (S[i] != A && S[i] != B) {
       const scalarprod = S[i].x * ABperp.x + S[i].y * ABperp.y;
